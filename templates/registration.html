@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Регистрация сопровождающих — ГОУ{% endblock %}
+
+{% block content %}
+<h2 style="text-align: center; margin-bottom: 20px;">Регистрация сопровождающего</h2>
+<form id="regForm" method="POST" action="/submit" style="display: flex; flex-direction: column; gap: 15px;">
+  <label>Фамилия</label>
+  <input type="text" name="last_name" required />
+
+  <label>Имя</label>
+  <input type="text" name="first_name" required />
+
+  <label>Отчество</label>
+  <input type="text" name="middle_name" />
+
+  <label>Серия и номер паспорта</label>
+  <input type="text" name="passport" required />
+
+  <label>Электронная почта</label>
+  <input type="email" name="email" required />
+
+  <label>Номер телефона</label>
+  <input type="tel" name="phone" required />
+
+  <label>Организация</label>
+  <input type="text" name="organization" />
+
+  <label>Должность</label>
+  <input type="text" name="position" />
+
+  <label>Комментарий</label>
+  <textarea name="comment" rows="3"></textarea>
+
+  <button type="submit" style="
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    font-weight: bold;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  ">Отправить</button>
+</form>
+
+<div id="successModal" style="
+  display: none;
+  text-align: center;
+  margin-top: 30px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+">
+  <h3>✅ Заявка успешно отправлена!</h3>
+</div>
+
+<script>
+  const form = document.getElementById('regForm');
+  const modal = document.getElementById('successModal');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const res = await fetch('/submit', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok) {
+      modal.style.display = 'block';
+      form.reset();
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 3000);
+    }
+  });
+</script>
+{% endblock %}
